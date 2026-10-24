@@ -1,0 +1,54 @@
+@startuml
+!theme plain
+hide circle
+skinparam linetype ortho
+
+entity "users" as users {
+  * id : UUID <<PK>>
+  * fio : VARCHAR(255)
+  * email : VARCHAR(255) <<UNIQUE>>
+}
+
+entity "account" as account {
+  * id : UUID <<PK>>
+  * user_id : UUID <<FK>>
+  * currency_code : CHAR(3)
+  * amount : NUMERIC(19,2)
+}
+
+entity "category" as category {
+  * id : UUID <<PK>>
+  * name : VARCHAR(255)
+    icon_link : TEXT
+    mcc_list : CHARACTER(4)[]
+    merchant_name_list : VARCHAR(255)[]
+}
+
+entity "transaction" as transaction {
+  * id : UUID <<PK>>
+  * account_id : UUID <<FK>>
+  * operation_time : TIMESTAMP WITH TIME ZONE
+  * amount_value : NUMERIC(19,2)
+  * amount_currency : CHAR(3)
+  * amount_in_account_currency : NUMERIC(19,2)
+    mcc : CHARACTER(4)
+    merchant_name : VARCHAR(255)
+    category_id : UUID <<FK>>
+}
+
+entity "budget" as budget {
+  * id : UUID <<PK>>
+  * user_id : UUID <<FK>>
+  * name : VARCHAR(255)
+  * amount : NUMERIC(19,2)
+  * currency : VARCHAR(3)
+  * from_date : TIMESTAMP
+  * to_date : TIMESTAMP
+  * category_ids : BIGINT[]
+}
+
+users ||--o{ account : ""
+account ||--o{ transaction : ""
+category ||--o{ transaction : ""
+users ||--o{ budget : ""
+@enduml

@@ -1,0 +1,90 @@
+components:
+  responses:
+    ForbiddenResponseDto:
+      description: Доступ запрещён
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    UserResponseDto:
+      description: Пользователь найден
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/UserDto'
+    UserCreatedResponseDto:
+      description: Пользователь успешно создан
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/UserDto'
+    NotFoundResponseDto:
+      description: Пользователь не найден
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    BadRequestResponseDto:
+      description: Неверные данные запроса
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    ConflictResponseDto:
+      description: Пользователь с таким email уже существует
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    OperationListResponseDto:
+      description: список операций пользователя
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: './schemas.yml#/components/schemas/OperationDto'
+    CategoriesResponseDto:
+      description: список категорий
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: './schemas.yml#/components/schemas/CategoryDto'
+    BudgetListResponseDto:
+      description: Успешный ответ со списком бюджетов
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: './schemas.yml#/components/schemas/BudgetDto'
+    BudgetCreatedResponseDto:
+      description: Бюджет успешно создан
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/BudgetCreatedDto'
+    UnauthorizedResponseDto:
+      description: Не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    InternalServerErrorResponseDto:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/ErrorCodeDto'
+    NoContentResponseDto:
+      description: успешно удалено
+    AccountCreatedResponseDto:
+      description: Счёт успешно создан
+      content:
+        application/json:
+          schema:
+            $ref: './schemas.yml#/components/schemas/AccountDto'
+      NoContentResponseDto:
+        description: успешно удалено

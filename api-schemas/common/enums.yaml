@@ -1,0 +1,8 @@
+components:
+  schemas:
+    OperationType:
+      type: string
+      enum: [ DEBIT, CREDIT ]
+    Currency:
+      type: string
+      enum: [ RUB, USD, BYN ]

@@ -1,0 +1,261 @@
+openapi: 3.0.3
+info:
+  title: OpenApi contract for smart-budget
+  description: contract for smart-budget
+  version: 1.0.0
+tags:
+  - name: Accounts
+    description: Операции со счетами
+  - name: Users
+    description: Операции с пользователями
+  - name: Budgets
+    description: Операции с бюджетами
+  - name: Categories
+    description: Операции с категориями
+  - name: Operations
+    description: Операции с транзакциями
+paths:
+  /api/users:
+    post:
+      summary: Создать нового пользователя
+      description: Регистрация нового пользователя в системе
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/UserCreateDto'
+      responses:
+        '201':
+          $ref: './common/responses.yml#/components/responses/UserCreatedResponseDto'
+        '400':
+          $ref: './common/responses.yml#/components/responses/BadRequestResponseDto'
+        '409':
+          $ref: './common/responses.yml#/components/responses/ConflictResponseDto'
+      tags:
+        - Users
+  /api/users/login:
+    get:
+      summary: Авторизация пользователя
+      description: Возвращает информацию о авторизованном пользователе
+      operationId: getCurrentUser
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: './common/responses.yml#/components/responses/UserResponseDto'
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Users
+  /api/users/{userId}:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/userId'
+    get:
+      summary: Получить пользователя по ID
+      description: Возвращает детальную информацию о пользователе по его UUID
+      operationId: getUserById
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: './common/responses.yml#/components/responses/UserResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+      tags:
+        - Users
+  /api/v1/users/{userId}/operations:
+    get:
+      summary: Получение операций пользователя
+      operationId: getUserOperations
+      security:
+        - basicAuth: []
+      parameters:
+        - $ref: './common/parameters.yml#/components/parameters/userId'
+        - $ref: './common/parameters.yml#/components/parameters/accountId'
+        - $ref: './common/parameters.yml#/components/parameters/budgetId'
+        - $ref: './common/parameters.yml#/components/parameters/operationType'
+        - $ref: './common/parameters.yml#/components/parameters/from'
+        - $ref: './common/parameters.yml#/components/parameters/to'
+      responses:
+        '200':
+          $ref: './common/responses.yml#/components/responses/OperationListResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+      tags:
+        - Operations
+  /api/v1/operations/{operationId}/exclude:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/operationId'
+    patch:
+      summary: Исключить или вернуть операцию в бюджет
+      operationId: excludeOperation
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/ExcludeOperationDto'
+      responses:
+        '204':
+          description: Статус операции успешно обновлён
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '403':
+          $ref: './common/responses.yml#/components/responses/ForbiddenResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Operations
+  /api/v1/operations/{operationId}/category:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/operationId'
+    patch:
+      summary: Обновить категорию операции
+      operationId: updateOperationCategory
+      security:
+        - basicAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/UpdateOperationCategoryDto'
+      responses:
+        '204':
+          description: Категория успешно обновлена
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '403':
+          $ref: './common/responses.yml#/components/responses/ForbiddenResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Operations
+  /api/v1/categories:
+    get:
+      summary: Получить список всех категорий
+      operationId: getCategories
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: './common/responses.yml#/components/responses/CategoriesResponseDto'
+      tags:
+        - Categories
+  /api/v1/users/{userId}/budgets:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/userId'
+    get:
+      summary: Получить список бюджетов пользователя
+      operationId: getUserBudgets
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: './common/responses.yml#/components/responses/BudgetListResponseDto'
+      tags:
+        - Budgets
+    post:
+      summary: Создать новый бюджет
+      operationId: createBudget
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/BudgetCreateDto'
+      responses:
+        '201':
+          $ref: './common/responses.yml#/components/responses/BudgetCreatedResponseDto'
+      tags:
+        - Budgets
+  /api/v1/users/{userId}/budgets/{budgetId}:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/userId'
+      - $ref: './common/parameters.yml#/components/parameters/budgetIdPath'
+    put:
+      summary: Обновить существующий бюджет
+      operationId: updateBudget
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/BudgetUpdateDto'
+      responses:
+        '204':
+          description: Бюджет успешно обновлен
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '403':
+          $ref: './common/responses.yml#/components/responses/ForbiddenResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Budgets
+  /api/v1/users/{userId}/accounts:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/userId'
+    post:
+      summary: Создать счёт пользователя
+      operationId: createAccount
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './common/schemas.yml#/components/schemas/AccountCreateDto'
+      responses:
+        '201':
+          $ref: './common/responses.yml#/components/responses/AccountCreatedResponseDto'
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '403':
+          $ref: './common/responses.yml#/components/responses/ForbiddenResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+        '409':
+          $ref: './common/responses.yml#/components/responses/ConflictResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Accounts
+  /api/v1/users/{userId}/budgets/{budgetId}/delete:
+    parameters:
+      - $ref: './common/parameters.yml#/components/parameters/userId'
+      - $ref: './common/parameters.yml#/components/parameters/budgetIdPath'
+    delete:
+      summary: удалить бюджет
+      operationId: deleteBudget
+      security:
+        - basicAuth: [ ]
+      responses:
+        '204':
+          $ref: './common/responses.yml#/components/responses/NoContentResponseDto'
+        '401':
+          $ref: './common/responses.yml#/components/responses/UnauthorizedResponseDto'
+        '403':
+          $ref: './common/responses.yml#/components/responses/ForbiddenResponseDto'
+        '404':
+          $ref: './common/responses.yml#/components/responses/NotFoundResponseDto'
+        '500':
+          $ref: './common/responses.yml#/components/responses/InternalServerErrorResponseDto'
+      tags:
+        - Budgets

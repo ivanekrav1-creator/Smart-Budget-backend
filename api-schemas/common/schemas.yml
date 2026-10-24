@@ -1,0 +1,267 @@
+components:
+  schemas:
+    UserDto:
+      type: object
+      description: Модель пользователя
+      required:
+        - id
+        - email
+        - fio
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Уникальный идентификатор
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        email:
+          type: string
+          format: email
+          description: Электронная почта
+          example: ivanov@example.com
+          minLength: 6
+          maxLength: 255
+        fio:
+          type: string
+          description: Фамилия Имя Отчество
+          example: Иванов Иван Иванович
+          minLength: 2
+          maxLength: 255
+    UserCreateDto:
+      type: object
+      description: Данные для создания пользователя
+      required:
+        - email
+        - fio
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        fio:
+          type: string
+        password:
+          type: string
+          format: password
+          minLength: 8
+    ErrorCodeDto:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: описание ошибки
+    AmountDto:
+      type: object
+      required:
+        - value
+        - currency
+      properties:
+        value:
+          type: number
+        currency:
+          $ref: './enums.yaml#/components/schemas/Currency'
+    CategoryDto:
+      type: object
+      required:
+        - id
+        - name
+        - icon
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        icon:
+          type: string
+    OperationDto:
+      type: object
+      required:
+        - id
+        - accountId
+        - type
+        - date
+        - description
+        - amount
+        - category
+        - excluded
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type: string
+          format: uuid
+        budgetId:
+          type: string
+          format: uuid
+          nullable: true
+        type:
+          $ref: './enums.yaml#/components/schemas/OperationType'
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        category:
+          $ref: '#/components/schemas/CategoryDto'
+        excluded:
+          type: boolean
+    ExcludeOperationDto:
+      type: object
+      required:
+        - excluded
+      properties:
+        excluded:
+          type: boolean
+    BudgetCreateDto:
+      type: object
+      required:
+        - name
+        - amount
+        - fromDate
+        - toDate
+        - categoryIds
+      properties:
+        name:
+          type: string
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        categoryIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    BudgetDto:
+      type: object
+      required:
+        - id
+        - name
+        - amount
+        - fromDate
+        - toDate
+        - categoryIds
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        amount:
+          type: object
+          required:
+            - expected
+            - actual
+          properties:
+            expected:
+              $ref: '#/components/schemas/AmountDto'
+            actual:
+              $ref: '#/components/schemas/AmountDto'
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        categoryIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    BudgetCreatedDto:
+      type: object
+      required:
+        - id
+        - name
+        - amount
+        - fromDate
+        - toDate
+        - categoryIds
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        categoryIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    BudgetUpdateDto:
+      type: object
+      required:
+        - name
+        - amount
+        - fromDate
+        - toDate
+        - categoryIds
+      properties:
+        name:
+          type: string
+        amount:
+          $ref: '#/components/schemas/AmountDto'
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        categoryIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    AccountCreateDto:
+      type: object
+      required:
+        - id
+        - currencyCode
+        - amount
+      properties:
+        id:
+          type: string
+          format: uuid
+        currencyCode:
+          $ref: './enums.yaml#/components/schemas/Currency'
+        amount:
+          type: number
+    AccountDto:
+      type: object
+      required:
+        - id
+        - currencyCode
+        - amount
+      properties:
+        id:
+          type: string
+          format: uuid
+        currencyCode:
+          $ref: './enums.yaml#/components/schemas/Currency'
+        amount:
+          type: number
+    UpdateOperationCategoryDto:
+      type: object
+      required:
+        - categoryId
+      properties:
+        categoryId:
+          type: integer
+          format: int64

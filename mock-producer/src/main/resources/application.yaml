@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: mock-producer
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart-budget
+    username: postgres
+    password: "0011"
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic:
+      name: transactions
+      partitions: 1
+      replicas: 1
+      retention-ms: "3600000"
+
+mock:
+  generator:
+    enabled: true
+    rate-ms: 5000
+    account-refresh-rate-ms: 60000
+    min-amount: "10.00"
+    max-amount: "100.00"
+    credit-probability: 0.5
+    credit-mcc: 6010
+    currency:
+      - "BYN"
+      - "USD"
+    merchants:
+      - name: "GreenHill Market"
+        mcc: 5411
+      - name: "PizzaFleet"
+        mcc: 5812
+      - name: "BurgerPoint"
+        mcc: 5812
+      - name: "CoffeeLike"
+        mcc: 5813
+      - name: "PetroStar"
+        mcc: 5541
+      - name: "GreenCharge EV"
+        mcc: 5552
+      - name: "CityMove Taxi"
+        mcc: 4121
+      - name: "StreamBox"
+        mcc: 5815
+      - name: "TechZone"
+        mcc: 5732
+      - name: "WearStyle"
+        mcc: 5651
+      - name: "SportMaster"
+        mcc: 5941
+      - name: "VitaPlus"
+        mcc: 5912
+      - name: "CinemaCity"
+        mcc: 7832
+      - name: "HairMaster"
+        mcc: 7230
+      - name: "PetStore"
+        mcc: 5995
+      - name: "SleepInn Hotel"
+        mcc: 7011
+      - name: "MerchantBank"
+        mcc: 6010

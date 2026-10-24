@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/smartbudget
+    username: testcontainer
+    password: testcontainer
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ivanekrav1@gmail.com
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+smart:
+  budget:
+    notification-interval: 5m
+    mail-from: Smart Budget <${spring.mail.username}>
+
+

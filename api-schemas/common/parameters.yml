@@ -1,0 +1,62 @@
+components:
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: UUID пользователя
+      schema:
+        type: string
+        format: uuid
+    accountId:
+      name: accountId
+      in: query
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+    operationType:
+      name: type
+      in: query
+      required: false
+      schema:
+        $ref: './enums.yaml#/components/schemas/OperationType'
+    from:
+      name: from
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date-time
+    to:
+      name: to
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    operationId:
+      name: operationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: ID операции
+    budgetId:
+      name: budgetId
+      in: query
+      required: false
+      schema:
+        type: string
+        format: uuid
+    budgetIdPath:
+      name: budgetId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
